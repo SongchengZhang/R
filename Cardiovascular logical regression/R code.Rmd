@@ -1,0 +1,213 @@
+---
+title: "3302 Group 5 Project"
+output: html_document
+---
+```{r}
+library(readr)
+library(tidyverse)
+library(psych)
+library(dplyr)
+```
+
+```{r}
+#upload dataset
+cardio_uncleaned <- read_csv("3302Project (1).cvs")
+```
+
+```{r}
+min(cardio_uncleaned)
+
+```
+
+```{r}
+#clean data
+cardio_remove<-cardio_uncleaned[,-1]
+cardio_loclean <- cardio_remove %>% filter(cardio_remove$ap_lo >= 20 & cardio_remove$ap_lo <= 200)
+cardio_hiclean <- cardio_loclean %>% filter(cardio_loclean$ap_hi >= 70 & cardio_loclean$ap_hi <= 250)
+cardio_apclean <- cardio_hiclean %>% filter(cardio_hiclean$ap_hi > cardio_hiclean$ap_lo)
+cardio_heclean <- cardio_apclean %>% filter(cardio_apclean$height >=60 & cardio_apclean$height <= 250)
+cardio <- cardio_heclean %>% filter(cardio_heclean$weight >=250 & cardio_heclean$weight <= 2000)
+cardio$weight<-cardio$weight/10
+glimpse(cardio)
+```
+
+```{r}
+describe(cardio)
+```
+
+```{r}
+#correlation
+cardio %>%
+  select(age, weight, ap_hi, ap_lo) %>%
+  GGally::ggpairs()+theme_bw()
+```
+
+```{r}
+#Presence of cardiovascular disease respect to age
+ggplot(data = cardio,aes(x=as.factor(cardio),y=age/365, col=as.factor(cardio)))+geom_boxplot()+xlab("presence of cardiovascular disease")+ylab("Age")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to height
+ggplot(data = cardio,aes(x=as.factor(cardio),y=height, col=as.factor(cardio)))+geom_boxplot()+xlab("presence of cardiovascular disease")+ylab("height(cm)")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to weight
+ggplot(data = cardio,aes(x=as.factor(cardio),y=weight, col=as.factor(cardio)))+geom_boxplot()+xlab("presence of cardiovascular disease")+ylab("weight(kg)")+ylim(0,200)
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Systolic blood pressure
+ggplot(data = cardio,aes(x=as.factor(cardio),y=ap_hi, col=as.factor(cardio)))+geom_boxplot()+xlab("presence of cardiovascular disease")+ylab("Systolic blood pressure")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Diastolic blood pressure
+ggplot(data = cardio,aes(x=as.factor(cardio),y=ap_lo, col=as.factor(cardio)))+geom_boxplot()+xlab("presence of cardiovascular disease")+ylab("Diastolic blood pressure")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to blood pressure
+cardio$bloodpressure=cardio$ap_hi/cardio$ap_lo
+ggplot(data = cardio,aes(x=as.factor(cardio),y=bloodpressure, col=as.factor(cardio)))+geom_boxplot()+xlab("presence of cardiovascular disease")+ylab("blood pressure")+ylim(1,3)
+```
+
+```{r}
+#Presence of cardiovascular disease respect to gender
+Gender<-factor(cardio$gender, levels = c(1, 2), labels=c("female", "male"))
+ggplot(data = cardio,aes(x=as.factor(cardio), fill=Gender))+geom_bar(position = "fill")+xlab("presence of cardiovascular disease")+ylab("proportion of gender")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Cholesterol
+Cholesterol_level<-factor(cardio$cholesterol, levels = c(1, 2, 3), labels=c("normal", "above normal", "well above normal"))
+ggplot(data = cardio,aes(x=as.factor(cardio), fill=Cholesterol_level))+geom_bar(position = "fill")+xlab("presence of cardiovascular disease")+ylab("proportion of Cholesterol_level")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Glucose
+Glucose_level<-factor(cardio$gluc, levels = c(1, 2, 3), labels=c("normal", "above normal", "well above normal"))
+ggplot(data = cardio,aes(x=as.factor(cardio), fill=Glucose_level))+geom_bar(position = "fill")+xlab("presence of cardiovascular disease")+ylab("proportion of Glucose_level")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Smoking
+Smoking<-factor(cardio$smoke, levels = c(1, 0), labels=c("smoking", "non-smoking"))
+ggplot(data = cardio,aes(x=as.factor(cardio), fill=Smoking))+geom_bar(position = "fill")+xlab("presence of cardiovascular disease")+ylab("proportion of Smoking")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Smoking
+Alcohol_intake<-factor(cardio$alco, levels = c(1, 0), labels=c("intaking", "not intaking"))
+ggplot(data = cardio,aes(x=as.factor(cardio), fill=Alcohol_intake))+geom_bar(position = "fill")+xlab("presence of cardiovascular disease")+ylab("proportion of intaking alcohol")
+```
+
+```{r}
+#Presence of cardiovascular disease respect to Physical activity
+Physical_activity<-factor(cardio$active, levels = c(1, 0), labels=c("taking", "not taking"))
+ggplot(data = cardio,aes(x=as.factor(cardio), fill=Physical_activity))+geom_bar(position = "fill")+xlab("presence of cardiovascular disease")+ylab("proportion of taking physical activity")
+```
+
+#Have relationship: age, glucose, cholesterol, bloodpressure
+#Not sure: weight, active, smoking
+#no relationship: gender, height, alchohol
+
+```{r}
+#from graph, age, cholesterol level, glucose level, bloodpressure seems to have influences on cardiovascular disease
+
+model<-glm(cardio ~ age+bloodpressure+cholesterol+gluc, data = cardio, family = "binomial")
+summary(model)
+```
+
+```{r}
+#Testing AIC blood pressure and seperate
+model1<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc, data = cardio, family = "binomial")
+model2<-glm(cardio ~ age+ap_hi+ap_lo+bloodpressure+cholesterol+gluc, data = cardio, family = "binomial")
+c(AIC(model1),AIC(model2))
+```
+```{r}
+#Testing interaction
+anova(model2, test="Chisq")
+```
+
+```{r}
+#Testing interaction
+anova(model1, model2)
+```
+
+```{r}
+#Doing PCA analysis
+Y1<-cbind(cardio$age, cardio$ap_hi, cardio$ap_lo, cardio$gluc, cardio$cholesterol)
+PCA.model1<-prcomp(Y1)
+summary(PCA.model1)
+```
+
+```{r}
+#Doing PCA analysis
+PCA.modelR<-prcomp(Y1, scale=TRUE)
+summary(PCA.modelR)
+```
+
+```{r}
+#Doing PCA analysis
+plot(PCA.model1, type="l")
+```
+
+```{r}
+#Doing PCA analysis
+plot(PCA.modelR, type="l")
+```
+
+```{r}
+#Testing AIC
+PCA1<-PCA.model1$x[,1]
+PCA2<-PCA.model1$x[,2]
+model2<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc, data = cardio, family = "binomial")
+model3<-glm(cardio ~ PCA1+PCA2, data = cardio, family = "binomial")
+c(AIC(model2),AIC(model3))
+```
+
+```{r}
+#Testing AIC
+model2<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc, data = cardio, family = "binomial")
+model4<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+weight, data = cardio, family = "binomial")
+model5<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+smoke, data = cardio, family = "binomial")
+model6<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active, data = cardio, family = "binomial")
+c(AIC(model2),AIC(model4),AIC(model5),AIC(model6))
+```
+```{r}
+#Testing AIC
+model6<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active, data = cardio, family = "binomial")
+model7<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active+smoke, data = cardio, family = "binomial")
+model8<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active+weight, data = cardio, family = "binomial")
+model9<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active+weight+smoke, data = cardio, family = "binomial")
+c(AIC(model6),AIC(model7),AIC(model8),AIC(model9))
+```
+
+
+```{r}
+#Doing PCA analysis
+Y2<-cbind(cardio$age, cardio$ap_hi, cardio$ap_lo, cardio$gluc, cardio$cholesterol, cardio$active, cardio$smoke, cardio$weight)
+PCA.model2<-prcomp(Y2)
+summary(PCA.model2)
+```
+
+```{r}
+#Doing PCA analysis
+plot(PCA.model2, type="l")
+```
+```{r}
+#Testing AIC
+PCA1<-PCA.model2$x[,1]
+PCA2<-PCA.model2$x[,2]
+model10<-glm(cardio ~ PCA1+PCA2, data = cardio, family = "binomial")
+model9<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active+weight+smoke, data = cardio, family = "binomial")
+c(AIC(model9),AIC(model10))
+```
+
+```{r}
+#Testing AIC
+model9<-glm(cardio ~ age+ap_hi+ap_lo+cholesterol+gluc+active+weight+smoke, data = cardio, family = "binomial")
+anova(model9, test="Chi")
+```
