@@ -1,0 +1,120 @@
+---
+title: "linear regression"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+library(alr4)
+library(broom)
+library(psych)
+```
+
+```{r}
+wine <- read_csv("C:/Users/10496/Desktop/linear_regression/WineRatings.csv")
+```
+
+```{r}
+describe(wine)
+```
+
+```{r}
+head(wine)
+```
+
+#Using %>% to make coding more easy
+```{r}
+#calculate average price of each rating and order by averageprice desc
+wine%>%group_by(Rating)%>%summarize(averagePrice=mean(Price), n = length(Score))%>% arrange(desc(averagePrice))
+```
+
+```{r message=FALSE}
+#plotting price and score
+wine%>%ggplot(aes(x=Price,y=Score))+geom_point()+theme_bw()+labs(x="Price of Wine", y="Wine Spectator Rating", title="Wine Prices vs. Spectator Rating")+theme(plot.title = element_text(hjust =0.5))
+```
+
+```{r message=FALSE}
+#using theme to do decorations
+wine%>%ggplot(aes(x=Price,y=Score))+geom_point()+theme_bw()+labs(x="Price of Wine", y="Wine Spectator Rating", title="Wine Prices vs. Spectator Rating")+theme(plot.title = element_text(hjust =0.5))+theme(panel.background = element_rect(fill = "lightblue",colour = "lightblue",size = 0.5, linetype = "solid"))
+```
+
+```{r message=FALSE}
+#linear regression
+wine.lm=lm(Score~Price,data=wine)
+summary(wine.lm)
+#need to check linearity
+```
+
+```{r, fig.width=10}
+wine.lm=lm(Score~Price,data=wine)
+par(mfrow = c(1, 2))
+plot(wine$Price, resid(wine.lm), 
+     main = "residuals vs. Price", xlab = "Price",
+     ylab = "residuals", pch=16)
+abline(h=0)
+
+plot(fitted(wine.lm), resid(wine.lm),
+     main = "residuals vs. fitted values", xlab = "fitted values",
+     ylab = "residuals", pch=16)
+abline(h=0)
+#it have obvious pattern so that we can't use this 
+```
+
+```{r warning=FALSE,message=FALSE}
+#same plot but ggplot
+#augment convert model to data frame
+(eplot1 = augment(wine.lm) %>% ggplot(aes(x = .fitted, y = .resid)) + 
+    geom_point(size = 2) + geom_hline(yintercept = 0) + theme_bw(22) +
+    xlab("fitted values") + ylab("residuals"))
+#geom_smooth(se = FALSE) the estimated regression line
+eplot1 + geom_smooth(se = FALSE)
+```
+
+```{r}
+#checking whether the variance is constant, which is not
+plot(fitted(wine.lm), rstandard(wine.lm), xlab = "fitted values", 
+     ylab = "standardized residuals", main = ""); abline(h = 0)
+```
+
+```{r}
+#checking normality of errors
+par(mfrow = c(1, 2))
+hist(resid(wine.lm), xlab="Residuals",
+     col="blue")
+
+qqnorm(resid(wine.lm), main="Normal Probability Plot of Residuals")
+qqline(resid(wine.lm))
+```
+#two major assumptions seem not reasonable.
+
+```{r message=FALSE}
+#transform to log 
+logwine.lm <- lm(Score ~ log10(Price), data=wine)
+wine %>% ggplot(aes(log10(Price), Score)) + geom_point() + theme_minimal(13) + labs(x="log(Price)", y="Score", title="log(Prices) vs. Score")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+#do confidence interval prediction
+price.grid = data.frame(Price=seq(from=min(wine$Price), to=max(wine$Price), length.out=100))
+ypred = predict(logwine.lm, newdata=price.grid, interval="confidence")
+plot(wine$Price, wine$Score, pch=16, xlab="Price", ylab="Score", 
+                      main="Estimated Mean Fuction with Conf. Interval",ylim=c(78,102))
+#pch is the shape of points
+lines(price.grid[,1], ypred[,1], col="blue", lwd=2)
+lines(price.grid[,1], ypred[,2], col="blue", lty=2) 
+lines(price.grid[,1], ypred[,3], col="blue", lty=2)
+```
+
+```{r}
+#do prediction interval prediction
+price.grid = data.frame(Price=seq(from=min(wine$Price), to=max(wine$Price), length.out=100))
+ypred = predict(logwine.lm, newdata=price.grid, interval="prediction")
+plot(wine$Price, wine$Score, pch=16, xlab="Price", ylab="Score", 
+                      main="Estimated Mean Fuction with Conf. Interval",ylim=c(78,102))
+lines(price.grid[,1], ypred[,1], col="blue", lwd=2)
+lines(price.grid[,1], ypred[,2], col="blue", lty=2) 
+lines(price.grid[,1], ypred[,3], col="blue", lty=2)
+```
+
+

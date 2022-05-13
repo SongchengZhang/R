@@ -1,0 +1,99 @@
+Number,Wine,Price,Score,Rating
+1,Barolo 2006,52,91,Outstanding
+2,Barbera d'Alba Superiore 2007,30,90,Outstanding
+3,Barbera Piemonte Castelvero 2009,10,80,Good
+4,Barolo Cannubi 2006,120,93,Outstanding
+5,Barolo San Pietro 2006,75,91,Outstanding
+6,Chardonnay Langhe 2009,20,83,Good
+7,Gavi Minaia 2009,39,87,Very Good
+8,Langhe Faletto 2007,50,91,Outstanding
+9,Favorita Langhe White 2008,18,87,Very Good
+10,Langhe Brandini & Brandini 2008,31,88,Very Good
+11,Arneis Langhe 2009,18,84,Good
+12,Barolo Vigneto La Villa 2006,48,93,Outstanding
+13,Barbaresco Currá 2007,55,92,Outstanding
+14,Barolo Monfortino Riserva 2002,375,98,Classic
+15,Barbera d'Alba Lirano Soprano 2007,56,91,Outstanding
+16,Barbera d'Alba Superiore 2006,38,90,Outstanding
+17,Barolo Rocche dell'Annunziata 2006,100,93,Outstanding
+18,Barbaresco Silvio Giamello Vicenziana 2005,42,92,Outstanding
+19,Roero Arneis Renesio 2009,35,89,Very Good
+20,Langhe Sorì San Lorenzo 2007,440,97,Classic
+21,Barbaresco Silvio Giamello Vicenziana 2006,39,89,Very Good
+22,Barbera d'Alba La Gamberaja 2007,35,87,Very Good
+23,Langhe White Cinerino 2008,38,86,Very Good
+24,Barolo Bricco Viole 2006,53,88,Very Good
+25,Barbera d'Alba Tradizione 2007,20,88,Very Good
+26,Barbera d'Alba 2009,25,89,Very Good
+27,Roero Arneis Valle dei Lunghi 2009,20,84,Good
+28,Piemonte La Valletta 2008,90,91,Outstanding
+29,Barolo Brunate 2006,125,91,Outstanding
+30,Barolo Vigna Rionda 2004,55,90,Outstanding
+31,Barolo Gramolere 2006,25,92,Outstanding
+32,Barbera d'Asti Superiore Chersì 2006,25,93,Outstanding
+33,Barbera d'Alba 2008,32,89,Very Good
+34,Barbera d'Alba Serraboella 2008,10,84,Good
+35,Cortese Piemonte Castelvero 2009,180,97,Classic
+36,Barolo Bussia Romirasco 2006,27,90,Outstanding
+37,Roero Arneis Saglietto 2008,147,92,Outstanding
+38,Barbaresco Bricco Asili 2007,38,89,Very Good
+39,Barbera d'Alba Superiore 2008,57,89,Very Good
+40,Barolo Prapò 2005,22,89,Very Good
+41,Moscato d'Asti 2009,19,87,Very Good
+42,Gavi Vigna del Lago 2009,72,94,Outstanding
+43,Barbaresco Serraboella 2007,150,94,Outstanding
+44,Barolo Bussia Colonnello 2006,60,93,Outstanding
+45,Barolo Vigneto Arborina 2006,17,88,Very Good
+46,Dolcetto d'Alba Fontanazza 2009,55,88,Very Good
+47,Barolo 2006,18,86,Very Good
+48,Gavi 2009,19,88,Very Good
+49,Gavi 2009,109,91,Outstanding
+50,Barbaresco Il Bricco 2006,12,87,Very Good
+51,Barbera d'Alba Filatura 2008,35,89,Very Good
+52,Barbera d'Alba Zio Nando 2008,20,89,Very Good
+53,Dolcetto d'Alba 2009,210,93,Outstanding
+54,Barbaresco 2007,37,93,Outstanding
+55,Chardonnay Langhe 2009,16,89,Very Good
+56,Barolo 2006,58,88,Very Good
+57,Langhe 2006,75,92,Outstanding
+58,Barbaresco Ovello 2006,39,88,Very Good
+59,Nebbiolo Langhe Cerretta 2008,300,96,Classic
+60,Barbera d'Asti Superiore Montruc 2008,35,90,Outstanding
+61,Barolo Le Rocche del Falletto Riserva 2004,22,90,Outstanding
+62,Barbaresco 2007,90,92,Outstanding
+63,Dolcetto d'Alba 2009,95,93,Outstanding
+64,Barolo 2006,21,89,Very Good
+65,Barolo Preda 2006,10,83,Good
+66,Barbera del Monferrato Superiore Perlydia 2003,25,86,Very Good
+67,Grangia NV,29,90,Outstanding
+68,Langhe White Le Pernici 2009,23,89,Very Good
+69,Barbera d'Asti Superiore Il Cascinone Rive 2007,90,96,Classic
+70,Barbera d'Alba Piani 2008,18,88,Very Good
+71,Barolo Ciabot Mentin Ginestra 2006,54,89,Very Good
+72,Dolcetto d'Alba 2009,62,96,Classic
+73,Barbera d'Asti Bricco dell'Uccellone 2007,21,88,Very Good
+74,Barolo Marenca 2006,37,88,Very Good
+75,Chardonnay Piemonte L'Altro 2009,24,86,Very Good
+76,Barolo Serralunga 2006,52,91,Outstanding
+77,Dolcetto d'Alba Superiore 2008,55,88,Very Good
+78,Barolo 2006,440,95,Classic
+79,Gavi Black Label 2009,105,90,Outstanding
+80,Langhe Sorì Tildìn 2007,40,89,Very Good
+81,Barolo Mosconi 2006,120,92,Outstanding
+82,Nebbiolo Langhe Ginestrino 2008,26,90,Outstanding
+83,Barolo La Rosa 2006,28,88,Very Good
+84,Nebbiolo Langhe 2008,150,93,Outstanding
+85,Dogliani Papà Celso 2008,37,91,Outstanding
+86,Barolo Lazzarito 2006,43,89,Very Good
+87,Barolo 2006,120,91,Outstanding
+88,Barbaresco Asij 2007,25,87,Very Good
+89,Barbaresco Vanotu 1999,25,88,Very Good
+90,Langhe Barilin 2005,40,90,Outstanding
+91,Barbera d'Alba Pistìn 2009,57,90,Outstanding
+92,Barolo Pì Vigne 2006,27,89,Very Good
+93,Barolo Broglio 2005,19,88,Very Good
+94,Dogliani Sirì d'Jermu 2008,15,87,Very Good
+95,Dolcetto d'Alba 2008,13,88,Very Good
+96,Gavi La Luciana 2009,69,92,Outstanding
+97,Dolcetto d'Alba Autinot 2009,13,87,Very Good
+98,Barolo Rocche di Castiglione 2006,50,87,Very Good
