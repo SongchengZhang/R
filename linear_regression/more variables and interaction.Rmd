@@ -1,0 +1,76 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+library(alr4)
+library(broom)
+```
+
+```{r}
+cal <- read_csv("Calories.csv")
+```
+
+```{r message=FALSE}
+#linear regression
+lm.main <- lm(calories ~ type + time, data=cal)
+summary(lm.main)
+```
+$\widehat{E}(calories \mid  type, time) = \hat{\beta}_0 + \hat{\beta}_1 D_{New2} + \hat{\beta}_2 D_{std} + \hat{\beta}_3 time$
+
+```{r}
+#graph of each type
+augment(lm.main) %>% ggplot(aes(x = `time`, y = `calories`, color = type)) + geom_point() + geom_line(aes(y = .fitted))
+```
+
+```{r message=FALSE}
+#test interaction, new1 is the baseline 
+lm.inter <- lm(calories ~ type*time, data=cal)
+summary(lm.inter)
+```
+$\widehat{E}(calories \mid  type, time) = \hat{\beta}_0 + \hat{\beta}_1 D_{New2} + \hat{\beta}_2 D_{std} + \hat{\beta}_3 time+\hat{\beta}_4(D_{New2}*time) + \hat{\beta}_5(D_{std}*time)$
+
+#Using AIC to test models
+```{r }
+#dim dimention of the matrix
+M1 = lm(calories ~ time, data=cal)
+n = dim(cal)[1]
+Mp1 = length(coef(M1))
+#AIC
+n*log(sum(resid(M1)^2)/n) + 2*Mp1
+#BIC
+n*log(sum(resid(M1)^2)/n) + log(n)*Mp1
+AIC(M1)
+```
+```{r message=FALSE}
+M2 = lm(calories ~ time+type, data=cal)
+n = dim(cal)[1]
+Mp2 = length(coef(M2))
+#AIC
+n*log(sum(resid(M2)^2)/n) + 2*Mp2
+#BIC
+n*log(sum(resid(M2)^2)/n) + log(n)*Mp2
+AIC(M2)
+```
+
+```{r message=FALSE}
+M3 = lm(calories ~ time*type, data=cal)
+n = dim(cal)[1]
+Mp3 = length(coef(M3))
+#AIC
+n*log(sum(resid(M3)^2)/n) + 2*Mp3
+#BIC
+n*log(sum(resid(M3)^2)/n) + log(n)*Mp3
+AIC(M3)
+```
+
+
+
+
+
+
+
+

@@ -12,7 +12,7 @@ library(psych)
 ```
 
 ```{r}
-wine <- read_csv("C:/Users/10496/Desktop/linear_regression/WineRatings.csv")
+wine <- read_csv("C:/Users/10496/Desktop/R/linear_regression/WineRatings.csv")
 ```
 
 ```{r}
