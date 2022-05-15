@@ -1,0 +1,74 @@
+---
+title: "r markdown output"
+description: | 
+  beautify html output 
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    theme: cerulean
+    number_sections: true
+    highlight: tango
+    df_print: paged
+---
+<!-- Ctrl+Shift+c: 快速注释 -->
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(dplyr)
+
+smaller <- diamonds %>% 
+  filter(carat <= 2.5)
+```
+
+# theme: cerulean, flatly, journal {.tabset .tabset-fade .tabset-pills}
+.tabset-fade: switching between tabs
+.tabset-pills: switching between tabs and looks like pill
+
+## toc:1-6, toc_float: keep the table of contents
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    theme: cerulean
+
+## number_sections: true
+add 1,2,3 to table of contents
+
+## install.packages("distill")
+distill::distill_article
+
+# paged table
+df_print: paged
+
+# Using css {#css .css} or blocks 
+```{css}
+h1 {color: blue;}
+h2 {color: green;}
+```
+
+
+# r code
+
+## Using `r ` can output from r funciton
+
+We have data about `r nrow(diamonds)` diamonds. Only
+`r nrow(diamonds) - nrow(smaller)` are larger than
+2.5 carats. The distribution of the remainder is shown
+below:
+
+## paged
+```{r}
+head(diamonds, 20)
+```
+
+
+## plot, echo=FALSE and the code will not show 
+```{r, echo = FALSE}
+smaller %>% 
+  ggplot(aes(carat)) + 
+  geom_freqpoly(binwidth = 0.01)
+```
+
