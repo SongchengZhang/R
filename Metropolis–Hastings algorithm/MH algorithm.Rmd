@@ -1,0 +1,122 @@
+---
+title: "Metropolis–Hastings algorithm
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cerulean
+    number_sections: true
+    highlight: tango
+    df_print: paged
+date: '2022-05-15'
+---
+```{r setup, include = FALSE}
+library(coda)
+```
+
+# MH algorithm 1
+
+## posterior function
+```{r}
+postFun =function(theta){
+  (1+0.2*((theta-1)/3)^2)^(-3)
+}
+```
+
+## random-walk Metropolis-Hastings algorithm
+```{r}
+set.seed(1)
+#set up
+iters = 10000
+propvar = 8
+thetaVec = 1:iters
+accept = 0
+# rnorm(n, mean, sd)
+thetaVec[0]=rnorm(1,0,1)
+LikVec = 1:iters
+LikVec[0] = postFun(thetaVec[0])
+
+#algorithm
+for (i in 2:iters){
+  #random walk at a theta and calculate whether to accept it
+  tempTheta = rnorm(1, thetaVec[i-1], propvar)
+  tempLik = postFun(tempTheta)
+  if(runif(1) < min(1, tempLik/LikVec[i-1])){
+    #accept
+    LikVec[i] = tempLik
+    thetaVec[i] = tempTheta
+    #count number of accept
+    accept = accept + 1
+  } else{
+    #not accept
+    LikVec[i] = LikVec[i-1]
+    thetaVec[i] = thetaVec[i-1]
+  }
+}
+```
+
+## trace plot
+```{r}
+plot(thetaVec, type="l")
+```
+converge
+
+## analysis
+```{r}
+accept/iters
+effectiveSize(thetaVec)
+```
+
+```{r}
+#set burn-in to 1000
+mean(thetaVec[1001:10000])
+var(thetaVec[1001:10000])
+```
+${E(\theta \mid y)} = $ `r mean(thetaVec[1001:10000])`
+${Var(\theta \mid y)} = $ `r var(thetaVec[1001:10000])`
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

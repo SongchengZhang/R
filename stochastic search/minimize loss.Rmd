@@ -1,0 +1,94 @@
+---
+title: "stochastic search"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    theme: cerulean
+    number_sections: true
+    highlight: tango
+    df_print: paged
+date: '2022-05-15'
+---
+# stochastic search
+Find a minimize the loss
+
+## Parameter
+$\theta$ binomial probability of success
+prior: flat prior, beta(1,1)
+posteior: beta(7, 5)
+a and $\theta$ between 0 and 1
+
+## Loss function
+```{r}
+#for a>theta
+lossFun1 = function(theta,a){
+  return ((a-theta)^2)
+}
+#for a<theta
+lossFun2 = function(theta,a){
+  return (2*(theta-a))
+}
+```
+
+# algorithm
+```{r}
+set.seed(1)
+#Starting value
+aStart=0.5
+thetaVec = rbeta(1000, 7,5)
+lossVec = ifelse(thetaVec <aStart, lossFun1(thetaVec,0.5), lossFun2(thetaVec, 0.5))
+#1000 as a large value to calculate loss
+loss = mean(lossVec)
+loss
+```
+
+```{r}
+set.seed(1)
+#width is the changing range of a 
+width = 0.1
+lossVec2 = 1:1000
+lossVec2[1] = loss
+aVec = 1:1000
+#a starts at 0.5
+aVec[1] = aStart
+
+for (i in 2:1000){
+  #new a between (a-0.1, a+0.1)
+  newA = runif(1, aVec[i-1]-width, aVec[i-1]+width)
+  if(newA>1){newA=1}
+  if(newA<0){newA=0}
+  lossVec = ifelse(thetaVec <newA, lossFun1(thetaVec,newA), lossFun2(thetaVec, newA))
+  loss = mean(lossVec)
+  if(runif(1)< min(1, lossVec2[i-1]/loss)){
+    #accept new a
+    lossVec2[i] = loss
+    aVec[i] = newA
+  } else {
+    lossVec2[i] = lossVec2[i-1]
+    aVec[i] = aVec[i-1]
+  }
+}
+```
+
+## traceplot
+```{r}
+plot(aVec, type="l")
+```
+
+```{r}
+plot(lossVec2, type="l")
+```
+
+## the minimum loss, and the a 
+```{r}
+min(lossVec2)
+which.min(lossVec2)
+aVec[which.min(lossVec2)]
+```
+
+
+
+
+
